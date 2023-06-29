@@ -46,7 +46,7 @@ export const Account = () => {
           authProviderConfig: {
             rpcTarget: NetworkUtil.getNetworkById(chainId)!.url,
             clientId: process.env.REACT_APP_W3AUTH_CLIENTID!,
-            network: 'testnet',
+            network: 'aqua',
             theme: 'dark'
           }
         })
@@ -59,13 +59,23 @@ export const Account = () => {
 
     useEffect(() => {
 
-    var authStore = localStorage.getItem("openlogin_store");
-    if (authStore) { 
-      setAuthDetails(JSON.parse(authStore))
+    // var authStore = localStorage.getItem("openlogin_store");
+    // if (authStore) { 
+    //   setAuthDetails(JSON.parse(authStore))
 
-    }
+    // }
 
     ;(async () => {
+
+
+      var authStore = localStorage.getItem("openlogin_store");
+      if(authStore && JSON.parse(authStore).idToken) {
+        setAuthDetails(JSON.parse(authStore))
+         
+      }
+      else {
+        navigate(RoutePath.login)
+      }
 
     const safeAuth = await authenticateUser(true);
     setAccountDetails({provider: safeAuth.auth?.getProvider(), authResponse: safeAuth.response, safeAuth: safeAuth.auth })    

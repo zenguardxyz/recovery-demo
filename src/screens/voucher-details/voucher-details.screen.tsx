@@ -53,6 +53,8 @@ import NFTDetails  from "utils/artifacts/nft.json";
 import { TimeUtil } from "utils/time";
 import { NetworkUtil } from "utils/networks";
 import { SafeAuthKit, SafeAuthProviderType } from "@safe-global/auth-kit";
+import useInitialization from "hooks/useInitialization";
+import useWalletConnectEventsManager from "hooks/useWalletConnectEventsManager";
 
 
 let GELATO_RELAY_API_KEY = process.env.REACT_APP_GELATO_RELAY_API_KEY;
@@ -72,43 +74,18 @@ export const VoucherDetailsScreen = () => {
   const clipboard = useClipboard({ timeout: 500 });
 
 
-  const authenticateUser = async (signin=false ) => {
-
-    const safeAuth =  await SafeAuthKit.init(SafeAuthProviderType.Web3Auth, {
-          
-      chainId: '0x' + NetworkUtil.getNetworkById(chainId)?.chainId.toString(16),
-      txServiceUrl:  NetworkUtil.getNetworkById(chainId)?.safeService, // Optional. Only if want to retrieve related safes
-      authProviderConfig: {
-        rpcTarget: NetworkUtil.getNetworkById(chainId)!.url,
-        clientId: process.env.REACT_APP_W3AUTH_CLIENTID!,
-        network: 'testnet',
-        theme: 'dark'
-      }
-    })
-
-    const response = signin ? await safeAuth?.signIn() : null;
-
-    return { response: response, auth: safeAuth}
-  }
-
   useEffect(() => {
+
+    
+
     ;(async () => {
 
-      // const safeAuth = await authenticateUser(true);
-      // setAccountDetails({provider: safeAuth.auth?.getProvider(), authResponse: safeAuth.response, safeAuth: safeAuth.auth })
-      // setSafeId(JSON.parse(localStorage.getItem("defaultWallet")!)[accountDetails.authResponse.eoa][chainId].address)
+
+      
       GELATO_RELAY_API_KEY = NetworkUtil.getNetworkById(chainId)?.type == 'Mainnet' ? process.env.REACT_APP_GELATO_RELAY_API_KEY_MAINNET : process.env.REACT_APP_GELATO_RELAY_API_KEY;
 
 
       nftContract = JSON.parse(JSON.stringify(NFTDetails)).networkAddresses[chainId];
-      console.log(nftContract)
-      // const eoa = accountDetails.authResponse.eoa;
-
-      // let defaultWallet: any =  localStorage.getItem("defaultWallet") ? JSON.parse(localStorage.getItem("defaultWallet")!) : {};
-  
-      // defaultWallet[eoa] = { address: safeId, deployed: safeStatus };
-  
-      // localStorage.setItem("defaultWallet", JSON.stringify(defaultWallet))
       
       setLoadingActivities(true);
       const safeOwner = new ethers.providers.Web3Provider(accountDetails.provider as ethers.providers.ExternalProvider)
@@ -148,10 +125,8 @@ export const VoucherDetailsScreen = () => {
     })
 
 
- 
-    
-
     const safeSdk: Safe = await Safe.create({ ethAdapter, safeAddress: safeId })
+
 
     const relayKit = new GelatoRelayPack(GELATO_RELAY_API_KEY)
 
@@ -168,6 +143,7 @@ export const VoucherDetailsScreen = () => {
       value: "0",
       data: addGuardian 
     }
+
 
     const transaction = await safeSdk.createTransaction({safeTransactionData})
 

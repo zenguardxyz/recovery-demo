@@ -10,6 +10,7 @@ const useRecoveryStore = create((set) => ({
   chainId:  localStorage.getItem("chainId") ? parseInt(localStorage.getItem("chainId")!) : 84531,
   safeStatus: true,
   recoveryType: '',
+  proposalParams: {},
 
   setRoleName: (name: string) => {
     set((state: any) => ({
@@ -58,6 +59,11 @@ const useRecoveryStore = create((set) => ({
     set((state: any) => ({
       formData: data,
     })),
+
+  setProposalParams: (data: object) =>
+    set((state: any) => ({
+      proposalParams: data,
+    })), 
 
   
 

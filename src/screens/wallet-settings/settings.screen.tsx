@@ -22,7 +22,7 @@ import {
   useMantineTheme
 } from "@mantine/core";
 
-import { IconHammer, IconFingerprint, IconMail, IconDatabase, IconScan, IconGitBranch, IconX } from '@tabler/icons';
+import { IconHammer, IconFingerprint, IconMail, IconDatabase, IconScan, IconGitBranch, IconX, IconPlugConnected } from '@tabler/icons';
 
 // import Safe, { SafeFactory } from "@safe-global/safe-core-sdk";
 import Safe, { getSafeContract, EthersAdapter, SafeFactory } from '@safe-global/protocol-kit';
@@ -58,7 +58,7 @@ import { register } from "@passwordless-id/webauthn/dist/esm/client";
 import { TimeUtil } from "utils/time";
 import { RoutePath } from "navigation";
 import { NetworkUtil } from "utils/networks";
-
+import { signClient } from "utils/walletConnect";
 
 const oauthGuardian = '0x14E900767Eca41A42424F2E20e52B20c61f9E3eA';
 const recoveryAPI = process.env.REACT_APP_RECOVERY_API;
@@ -88,12 +88,14 @@ export const WalletSettings = () => {
   const navigate = useNavigate();
   const theme = useMantineTheme();
 
-  const { accountDetails, safeId, setSafeId, chainId, setChainId  } = useRecoveryStore(
+  const { accountDetails, safeId, setSafeId, chainId, setChainId, proposalParams, setProposalParams  } = useRecoveryStore(
     (state: any) => state
   );
 
+
   const [signalingPeriod, setSignalingPeriod] = useState(30);
   const [walletBeneficiary, setWalletBeneficiary]: any = useState('');
+  const [wcURI, setWcURI]: any = useState('');
   const [webAuthnData, setWebAuthnData] = useState({});
   const [recoveryType, setRecoveryType]: any = useState('email');
   const [claimType, setClaimType]: any = useState();
@@ -103,6 +105,29 @@ export const WalletSettings = () => {
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [executedHash, setExecutedHash] = useState("");
   
+
+  const pairClient = async () => {
+
+    console.log(signClient)
+    await signClient.core.pairing.pair({ uri: wcURI });
+
+  }
+
+
+  const approveConnection = async () => {
+
+  const { topic, acknowledged } = await signClient.approve({
+    id: proposalParams.id,
+    namespaces: {
+      eip155: {
+        accounts: proposalParams.requiredNamespaces.eip155.chains.map((chain: string) => `${chain}:${safeId}`),
+        methods: proposalParams.requiredNamespaces.eip155.methods,
+        events: proposalParams.requiredNamespaces.eip155.events,
+      },
+    },
+  });
+  setProposalParams({});
+}
 
   const registerBiometric = async () => {
 
@@ -118,7 +143,6 @@ export const WalletSettings = () => {
   "debug": false
 })
 
-console.log(registration)
 setRegistering(false); 
 setRegistrationSuccess(true);
 
@@ -331,7 +355,8 @@ const options: MetaTransactionOptions = {
     <Paper withBorder className={classes.settingsContainer}>
       
       <Container className={classes.formContainer} p={40}>
-        
+
+
       <Modal
         centered
         opened={creating}
@@ -365,7 +390,48 @@ const options: MetaTransactionOptions = {
             </Container>
           </Group>
         </Box>
+      </Modal>  
+      
+        
+     <Modal
+        centered
+        opened={proposalParams.id}
+        onClose={() => { setProposalParams({})} }
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        withCloseButton={false}
+        // overlayOpacity={0.5}
+        size={320}
+      >
+        <Box sx={{ padding: "20px" }}>
+          <Group>
+            <Container
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: "20px",
+              }}
+            >
+              
+              
+              <Box sx={{ paddingTop: "20px" }}><Center><Image src={ZenGuard} width={150}/></Center> </Box>
+              <Text mt={"lg"} align='center'> Connect ZenGuard Wallet to { proposalParams.proposer?.metadata?.name } ?
+              </Text>
+              
+            </Container>
+          </Group>
+          <Group position="center">
+        <Button variant="outline" color="red" onClick={()=>{}}>Reject</Button>
+        <Button variant="outline" color="green" onClick={()=>{approveConnection()}}>Accept</Button>
+      </Group>
+        </Box>
       </Modal>
+     
         <Box mt={20}>
           <>
             <BackButton label="Go Back" onClick={() => navigate(RoutePath.account)} />
@@ -383,7 +449,7 @@ const options: MetaTransactionOptions = {
 
         <Text size="md" weight={600}>
               General settings ⚙️
-            </Text>{" "}
+        </Text>{" "}
 
           
 
@@ -434,6 +500,37 @@ const options: MetaTransactionOptions = {
                 onChange={(value) => {          
                   setSafeId(value) } }
               />
+
+
+<Text size="sm" weight={600}>
+              WalletConnect Settings ⚙️
+        </Text>{" "}
+       <Group >
+         
+        <TextInput
+            placeholder="WalletConnect URI"
+            // label="Wallet Connect URI"
+            rightSectionWidth={92}
+            onChange={(event) => {
+              setWcURI(event.target.value);
+            }}
+          />
+
+
+          <Button
+                // loading={registering}
+                onClick={() => {
+                  pairClient();
+                }}
+                leftIcon={<IconPlugConnected />} 
+                variant="default"
+                color="dark"
+              >
+                Connect Now
+              </Button>
+
+
+              </Group>
 
               </Stack>
 

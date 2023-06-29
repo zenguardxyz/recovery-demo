@@ -2,37 +2,24 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import {
-  TextInput,
   Text,
   Paper,
   Group,
   Button,
   Divider,
-  Stack,
   Box,
-  Notification,
-  Alert,
   Modal,
-  Center,
   Loader,
   Container,
 } from "@mantine/core";
 import { GoogleButton, MetaMaskButton } from "../../components";
-import { OAuthProvider } from "@magic-ext/oauth";
-import { ethers } from 'ethers'
 
 import { SafeEventEmitterProvider, CHAIN_NAMESPACES } from '@web3auth/base'
-import { Web3Auth } from "@web3auth/modal";
 import { SafeAuthKit, SafeAuthProviderType, SafeAuthSignInData } from '@safe-global/auth-kit'
-import SafeServiceClient from '@safe-global/safe-service-client'
-import EthersAdapter from '@safe-global/safe-ethers-lib'
 
-import { useServices } from "services";
-import { useStores } from "store";
+
 import { RoutePath } from "navigation";
-import { StyledSpan } from "./auth.screen.styles";
 
-import Safe, { SafeAccountConfig, SafeFactory } from '@safe-global/safe-core-sdk'
 import useRecoveryStore from "store/recovery/recovery.store";
 import { NetworkUtil } from "utils/networks";
 
@@ -68,7 +55,7 @@ export function LoginScreen(props: any) {
       authProviderConfig: {
         rpcTarget: NetworkUtil.getNetworkById(chainId)!.url,
         clientId: process.env.REACT_APP_W3AUTH_CLIENTID!,
-        network: 'testnet',
+        network: 'aqua',
         theme: 'dark'
       }
     })
@@ -85,22 +72,12 @@ export function LoginScreen(props: any) {
 
       var authStore = localStorage.getItem("openlogin_store");
       if(authStore && JSON.parse(authStore).idToken) {
-        // setSigningIn(true);  
-        // const safeA =  await authenticateUser(true);
-      
-        // setSafeAuthSignInResponse(safeA.response!)
-        // setProvider(safeA.auth?.getProvider() as SafeEventEmitterProvider)
-  
-        // setAccountDetails({provider: safeA.auth?.getProvider() as SafeEventEmitterProvider, authResponse: safeA.response, safeAuth: safeA.auth })
-  
          navigate(RoutePath.account)
       }
       else {
       setLoginStatus(false);
       
       const safeA =  await authenticateUser(false);
-
-
       setLoginStatus(true);
       setSafeAuth(safeA.auth);
       }

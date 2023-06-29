@@ -4,17 +4,27 @@ import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { AppLayout } from "./components";
 import { LandingPageNavigation, Navigation } from "./navigation";
 import { useTheme } from "./hooks";
+import useWalletConnectEventsManager from "hooks/useWalletConnectEventsManager";
+import useInitialization from "hooks/useInitialization";
 
 
 function App() {
   const { colorScheme, toggleColorScheme } = useTheme();
   const { pathname } = useLocation();
 
+
+  const initialized = useInitialization();
+      
+  useWalletConnectEventsManager(initialized);
+
+
+
   // routes for landing page
   if (pathname === "/" || pathname === "/teams")
     return <LandingPageNavigation />;
 
   return (
+    initialized ?
     <ColorSchemeProvider
       colorScheme={colorScheme}
       toggleColorScheme={toggleColorScheme}
@@ -40,7 +50,7 @@ function App() {
           <Navigation />
         </AppLayout>
       </MantineProvider>
-    </ColorSchemeProvider>
+    </ColorSchemeProvider> : <> </>
   );
 }
 
