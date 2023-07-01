@@ -1,6 +1,7 @@
 import {
   Center,
   Container,
+  Dialog,
   Group,
   Stack,
   Text,
@@ -10,7 +11,9 @@ import {
   Modal,
   Skeleton,
   UnstyledButton,
+  Notification,
   Chip,
+  useMantineTheme,
 } from "@mantine/core";
 import {
   BackButton,
@@ -33,7 +36,7 @@ import ETH from "../../assets/icons/eth.svg";
 import Gnosis from "../../assets/icons/gno.svg";
 //@ts-ignore
 import Polygon from "../../assets/icons/matic.svg";
-import { IconCopy, IconBell, IconSettings, IconPlus } from "@tabler/icons";
+import { IconCopy, IconBell, IconSettings, IconPlus, IconCheck } from "@tabler/icons";
 import { useStyles } from "./voucher-details.screen.styles";
 import useRecoveryStore from "store/recovery/recovery.store";
 import { useEffect, useState } from "react";
@@ -47,24 +50,29 @@ import { Contract, ethers } from "ethers";
 import { MetaTransactionOptions, SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types";
 import Safe, { EthersAdapter, getSafeContract } from "@safe-global/protocol-kit";
 import { GelatoRelayPack } from "@safe-global/relay-kit";
-import { useClipboard } from "@mantine/hooks";
+import { useClipboard, useDisclosure } from "@mantine/hooks";
 import { AddressUtil } from "utils/address";
 import NFTDetails  from "utils/artifacts/nft.json";
 import { TimeUtil } from "utils/time";
+import { getAccount } from "utils/safe";
 import { NetworkUtil } from "utils/networks";
-import { SafeAuthKit, SafeAuthProviderType } from "@safe-global/auth-kit";
-import useInitialization from "hooks/useInitialization";
-import useWalletConnectEventsManager from "hooks/useWalletConnectEventsManager";
+import { createContractTransaction, relayTransaction, waitForRelayTransaction } from "utils/gelato";
+import { themeOverRide } from "themes/default-theme";
+import { Provider } from "@ethersproject/providers";
 
 
-let GELATO_RELAY_API_KEY = process.env.REACT_APP_GELATO_RELAY_API_KEY;
 let nftContract = '';
+let safeOwner: Provider;
+let safeInstance: Safe;
+
 
 export const VoucherDetailsScreen = () => {
   const { classes } = useStyles();
 
   const navigate = useNavigate();
-  const { accountDetails, safeId, safeStatus, chainId, setAccountDetails, setSafeId } = useRecoveryStore((state: any) => state);
+  const theme = useMantineTheme();
+
+  const { accountDetails, safeId, safeStatus, chainId, confirming, confirmed, setConfirming, setConfirmed } = useRecoveryStore((state: any) => state);
   const [ fetching, setFetching ] =  useState(true);
   const [ balance, setBalance ] = useState('0');
   const [ nftBalance, setNFTBalance ] = useState('0');
@@ -80,117 +88,70 @@ export const VoucherDetailsScreen = () => {
 
     ;(async () => {
 
-
+      try {
       
-      GELATO_RELAY_API_KEY = NetworkUtil.getNetworkById(chainId)?.type == 'Mainnet' ? process.env.REACT_APP_GELATO_RELAY_API_KEY_MAINNET : process.env.REACT_APP_GELATO_RELAY_API_KEY;
-
-
       nftContract = JSON.parse(JSON.stringify(NFTDetails)).networkAddresses[chainId];
       
       setLoadingActivities(true);
-      const safeOwner = new ethers.providers.Web3Provider(accountDetails.provider as ethers.providers.ExternalProvider)
+      safeOwner = new ethers.providers.Web3Provider(accountDetails.provider as ethers.providers.ExternalProvider)
       setBalance(ethers.utils.formatEther(await safeOwner.getBalance(safeId)));   
       const NFTInstance = new Contract(nftContract, sampleNFT.abi, safeOwner)
       setNFTBalance((await NFTInstance.balanceOf(safeId)).toString());   
+
+      safeInstance = await getAccount(accountDetails.provider, safeId)
+
+      // console.log(safeInstance)
       setFetching(false);
       setLoadingActivities(false);
+
+      }
+      catch(e) {
+
+        safeInstance = new Safe();
+        setFetching(false);
+        setLoadingActivities(false);
+
+      }
 
     
 
     })()
-  }, [creating, safeStatus])
+  }, [confirmed, safeStatus])
 
 
   const mintNFT = async () => {
     
-    const gasLimit = '100000'
-
-    const options: MetaTransactionOptions = {
-      gasLimit,
-      isSponsored: true
-    }
-      
-    
     setCreating(true);
 
-    while(!JSON.parse(localStorage.getItem("defaultWallet")!)[accountDetails.authResponse.eoa][chainId].deployed) {
+    while(!JSON.parse(localStorage.getItem("defaultWallet")!)[accountDetails.authResponse.eoa][chainId].deployed ) {
       await TimeUtil.sleep(1000);
+
     }
 
-
-    const safeOwner = new ethers.providers.Web3Provider(accountDetails.provider as ethers.providers.ExternalProvider).getSigner(0)
-    const ethAdapter = new EthersAdapter({
-      ethers,
-      signerOrProvider:safeOwner
-    })
-
-
-    const safeSdk: Safe = await Safe.create({ ethAdapter, safeAddress: safeId })
-
-
-    const relayKit = new GelatoRelayPack(GELATO_RELAY_API_KEY)
-
-
-
-    const safeSingletonContract = await getSafeContract({ ethAdapter, safeVersion: await safeSdk.getContractVersion() })
-
-    const NFTInstance = new Contract(nftContract, sampleNFT.abi, safeOwner)
-
-    let addGuardian =  NFTInstance.interface.encodeFunctionData('mint')
-    
-    const safeTransactionData: SafeTransactionDataPartial = {
-      to: nftContract,
-      value: "0",
-      data: addGuardian 
-    }
-
-
-    const transaction = await safeSdk.createTransaction({safeTransactionData})
-
-        
-    const signedSafeTx = await safeSdk.signTransaction(transaction)
-
-    const encodedTx = safeSingletonContract.encode('execTransaction', [
-      signedSafeTx.data.to,
-      signedSafeTx.data.value,
-      signedSafeTx.data.data,
-      signedSafeTx.data.operation,
-      signedSafeTx.data.safeTxGas,
-      signedSafeTx.data.baseGas,
-      signedSafeTx.data.gasPrice,
-      signedSafeTx.data.gasToken,
-      signedSafeTx.data.refundReceiver,
-      signedSafeTx.encodedSignatures()
-    ])
-
-    const relayTransaction = {
-      target: safeId,
-      encodedTransaction: encodedTx,
-      chainId: chainId,
-      options
-    }
-
-    const response = await relayKit.relayTransaction(relayTransaction)
-
-
-    let taskStatus = null;
-    do {
-    await TimeUtil.sleep(2000)
-    console.log('waiting')
     try {
-    taskStatus = await relayKit.getTaskStatus(response.taskId)
-    console.log(taskStatus?.taskState)
+      await safeInstance.isSafeDeployed()
     }
-    catch(e)
-    {
-      // pass
+    catch(e) {
+      safeInstance = await getAccount(accountDetails.provider, safeId)
     }
 
-    } while(taskStatus?.taskState != 'ExecSuccess') 
-    
 
-  
+    const signedSafeTx = await createContractTransaction(safeInstance, nftContract, sampleNFT.abi, safeOwner, 'mint' )
+
     setCreating(false);
+    setConfirming(true);
+    setConfirmed(false);
+
+    const response = await relayTransaction(signedSafeTx, chainId, safeInstance, safeId)
+
+    await waitForRelayTransaction(response.taskId, chainId)
+
+
+    setConfirmed(true);
+    setConfirming(false);
+    await TimeUtil.sleep(2000)
+    setConfirmed(false);
+    
   
   }
 
@@ -200,8 +161,7 @@ export const VoucherDetailsScreen = () => {
         <VoucherDetailsShimmer />
       ) : (
         <>
-          {/* <Confetti /> */}
-
+        
           <ClaimModal />
 
           <Paper withBorder className={classes.voucherDetailsContainer}>
@@ -219,6 +179,7 @@ export const VoucherDetailsScreen = () => {
         // overlayOpacity={0.5}
         size={320}
       >
+        
         <Box sx={{ padding: "20px" }}>
           <Group>
             <Container

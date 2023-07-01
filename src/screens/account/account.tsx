@@ -11,9 +11,6 @@ export const Account = () => {
 
     const { accountDetails, setSafeId, setAuthDetails, setAccountDetails, chainId, safeId } = useRecoveryStore((state: any) => state);
 
-
-    
-
     const navigate = useNavigate();
 
 
@@ -59,12 +56,6 @@ export const Account = () => {
 
     useEffect(() => {
 
-    // var authStore = localStorage.getItem("openlogin_store");
-    // if (authStore) { 
-    //   setAuthDetails(JSON.parse(authStore))
-
-    // }
-
     ;(async () => {
 
 
@@ -78,6 +69,7 @@ export const Account = () => {
       }
 
     const safeAuth = await authenticateUser(true);
+
     setAccountDetails({provider: safeAuth.auth?.getProvider(), authResponse: safeAuth.response, safeAuth: safeAuth.auth })    
 
     let walletStore: any =   updateWalletStore(safeAuth.response);
@@ -109,9 +101,6 @@ export const Account = () => {
     
   })()
 
-
-
-   
   }, [])
 
   return (<VoucherDetailsShimmer />)

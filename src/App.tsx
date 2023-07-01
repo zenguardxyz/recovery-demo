@@ -12,7 +12,6 @@ function App() {
   const { colorScheme, toggleColorScheme } = useTheme();
   const { pathname } = useLocation();
 
-
   const initialized = useInitialization();
       
   useWalletConnectEventsManager(initialized);
@@ -24,7 +23,6 @@ function App() {
     return <LandingPageNavigation />;
 
   return (
-    initialized ?
     <ColorSchemeProvider
       colorScheme={colorScheme}
       toggleColorScheme={toggleColorScheme}
@@ -50,7 +48,7 @@ function App() {
           <Navigation />
         </AppLayout>
       </MantineProvider>
-    </ColorSchemeProvider> : <> </>
+    </ColorSchemeProvider> 
   );
 }
 

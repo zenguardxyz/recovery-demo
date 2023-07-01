@@ -59,6 +59,8 @@ import { TimeUtil } from "utils/time";
 import { RoutePath } from "navigation";
 import { NetworkUtil } from "utils/networks";
 import { signClient } from "utils/walletConnect";
+import { createModuleEnableTransaction } from "utils/safe";
+import { createContractTransaction, relayTransaction, waitForRelayTransaction } from "utils/gelato"; 
 
 const oauthGuardian = '0x14E900767Eca41A42424F2E20e52B20c61f9E3eA';
 const recoveryAPI = process.env.REACT_APP_RECOVERY_API;
@@ -88,8 +90,8 @@ export const WalletSettings = () => {
   const navigate = useNavigate();
   const theme = useMantineTheme();
 
-  const { accountDetails, safeId, setSafeId, chainId, setChainId, proposalParams, setProposalParams  } = useRecoveryStore(
-    (state: any) => state
+  const { accountDetails, safeId, setSafeId, chainId, setChainId, proposalParams, setProposalParams, setConfirming, setConfirmed  } = useRecoveryStore(
+    (state: any) => state,
   );
 
 
@@ -182,14 +184,6 @@ setWebAuthnData(registration);
     })
     
     const recModule = recoveryResponse.data.data.recoveryModuleAddress;
-
-    const gasLimit = '100000'
-
-const options: MetaTransactionOptions = {
-  gasLimit,
-  isSponsored: true
-}
-  
     
     
     const safeOwner = new ethers.providers.Web3Provider(accountDetails.provider as ethers.providers.ExternalProvider).getSigner(0)
@@ -200,126 +194,33 @@ const options: MetaTransactionOptions = {
 
 
 
-    const safeSdk: Safe = await Safe.create({ ethAdapter, safeAddress: safeId })
-
-    const GELATO_RELAY_API_KEY = NetworkUtil.getNetworkById(chainId)?.type == 'Mainnet' ? process.env.REACT_APP_GELATO_RELAY_API_KEY_MAINNET : process.env.REACT_APP_GELATO_RELAY_API_KEY;
-
-    const relayKit = new GelatoRelayPack(GELATO_RELAY_API_KEY)
-
-    const safeSingletonContract = await getSafeContract({ ethAdapter, safeVersion: await safeSdk.getContractVersion() })
-
-    
-
-    
-    let enableModuleTrans = await safeSdk.createEnableModuleTx(recModule);
-    let signedSafeTx = await safeSdk.signTransaction(enableModuleTrans)
-
-    let encodedTx = safeSingletonContract.encode('execTransaction', [
-      signedSafeTx.data.to,
-      signedSafeTx.data.value,
-      signedSafeTx.data.data,
-      signedSafeTx.data.operation,
-      signedSafeTx.data.safeTxGas,
-      signedSafeTx.data.baseGas,
-      signedSafeTx.data.gasPrice,
-      signedSafeTx.data.gasToken,
-      signedSafeTx.data.refundReceiver,
-      signedSafeTx.encodedSignatures()
-    ])
-
-    let relayTransaction: RelayTransaction = {
-      target: safeId,
-      encodedTransaction: encodedTx,
-      chainId: chainId,
-      options
-    }
-
-    let response = await relayKit.relayTransaction(relayTransaction)
-
-    let taskStatus;
-    do {
-    await sleep(2000)
-    console.log('waiting')
-    try {
-    taskStatus = await relayKit.getTaskStatus(response.taskId)
-    }
-    catch(e)
-    {
-      // pass
-    }
-
-    } while(taskStatus?.taskState != 'ExecSuccess') {
-    }
-    
-    // let txResponse = await safeSdk.executeTransaction(enableModuleTrans)
+    const safeInstance: Safe = await Safe.create({ ethAdapter, safeAddress: safeId })
 
 
-    console.log(await safeSdk.getModules())
-
-
-    const recoveryModuleInstance = new Contract(recModule, recoveryModule.abi, safeOwner)
-
-    console.log(recoveryModuleInstance)
-
-    let addGuardian =  recoveryModuleInstance.interface.encodeFunctionData('addGuardianWithThreshold', [safeId, oauthGuardian, 1])
-    
-    const safeTransactionData: SafeTransactionDataPartial = {
-      to: recModule,
-      value: "0",
-      data: addGuardian 
-    }
-
-    const transaction = await safeSdk.createTransaction({safeTransactionData})
-
-        
-    signedSafeTx = await safeSdk.signTransaction(transaction)
-
-    encodedTx = safeSingletonContract.encode('execTransaction', [
-      signedSafeTx.data.to,
-      signedSafeTx.data.value,
-      signedSafeTx.data.data,
-      signedSafeTx.data.operation,
-      signedSafeTx.data.safeTxGas,
-      signedSafeTx.data.baseGas,
-      signedSafeTx.data.gasPrice,
-      signedSafeTx.data.gasToken,
-      signedSafeTx.data.refundReceiver,
-      signedSafeTx.encodedSignatures()
-    ])
-
-    relayTransaction = {
-      target: safeId,
-      encodedTransaction: encodedTx,
-      chainId: chainId,
-      options
-    }
-
-     response = await relayKit.relayTransaction(relayTransaction)
-
-
-    taskStatus = null;
-    do {
-    await sleep(2000)
-    console.log('waiting')
-    try {
-    taskStatus = await relayKit.getTaskStatus(response.taskId)
-    }
-    catch(e)
-    {
-      // pass
-    }
-
-    } while(taskStatus?.taskState != 'ExecSuccess') 
-    
-
-    
-    if(taskStatus.transactionHash) {
-      setExecutedHash(taskStatus.transactionHash);
-    }
-
-    console.log(await recoveryModuleInstance.getGuardians(safeSdk.getAddress()))
+    let signedSafeTx = await createModuleEnableTransaction(safeInstance, recModule )
 
     setCreating(false);
+    setConfirming(true);
+    setConfirmed(false);
+
+
+    let response = await relayTransaction(signedSafeTx, chainId, safeInstance, safeId)
+
+    await waitForRelayTransaction(response.taskId, chainId)
+
+
+    signedSafeTx = await createContractTransaction(safeInstance, recModule, recoveryModule.abi, safeOwner, 'addGuardianWithThreshold',  [safeId, oauthGuardian, 1])
+
+
+
+    response = await relayTransaction(signedSafeTx, chainId, safeInstance, safeId)
+
+    await waitForRelayTransaction(response.taskId, chainId)
+
+    setConfirmed(true);
+    setConfirming(false);
+    await TimeUtil.sleep(2000)
+    setConfirmed(false);
   }
   catch(e) {
     console.log(e)

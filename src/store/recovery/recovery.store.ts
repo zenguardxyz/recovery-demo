@@ -9,6 +9,8 @@ const useRecoveryStore = create((set) => ({
   safeId: '',
   chainId:  localStorage.getItem("chainId") ? parseInt(localStorage.getItem("chainId")!) : 84531,
   safeStatus: true,
+  confirming: false,
+  confirmed: false,
   recoveryType: '',
   proposalParams: {},
 
@@ -39,6 +41,22 @@ const useRecoveryStore = create((set) => ({
       safeStatus: status,
     }));
   },
+
+  setConfirming: (status: boolean) => {
+    set((state: any) => ({
+      ...state,
+      confirming: status,
+    }));
+  },
+
+  setConfirmed: (status: boolean) => {
+    set((state: any) => ({
+      ...state,
+      confirmed: status,
+    }));
+  },
+
+  
 
   setFetching: (status: boolean) => {
     set((state: any) => ({
