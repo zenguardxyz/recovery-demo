@@ -20,12 +20,8 @@ import {
 import { IconAlertCircle, IconMoneybag } from "@tabler/icons";
 import useRecoveryStore from "store/recovery/recovery.store";
 import { useStyles } from "./create-recovery.component.styles";
-import { DatePicker } from "@mantine/dates";
-import { useServices } from "services";
 import { BackButton, ProgressStatus, Title, Image } from "../../../components";
-import recoveryModule from "../../../artifacts/SocialRecoveryModule.json";
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
 import {  } from "services";
 
 //@ts-ignore
@@ -108,21 +104,37 @@ export const CreateRecoveryForm = () => {
     
     setSafeId(predectedWalletAddress)
 
+
+
+    
+    
+
+    try {
+
+    const gasPrice = await safeDeployer.getGasPrice();  
+    const safeSdk =  safeFactory.deploySafe({ safeAccountConfig, safeDeploymentConfig, options: chainId == '137' ? {gasPrice : parseInt(gasPrice.toString()) + 20000000000} : {}})
+    
     setCreating(false);
 
-    const safeSdk = safeFactory.deploySafe({ safeAccountConfig, safeDeploymentConfig  })
     const eoa = accountDetails.authResponse.eoa;  
     let defaultWallet: any =  localStorage.getItem("defaultWallet") ? JSON.parse(localStorage.getItem("defaultWallet")!) : {};
     defaultWallet[eoa][chainId] = { address: predectedWalletAddress, deployed: false };
     localStorage.setItem("defaultWallet", JSON.stringify(defaultWallet))
 
     safeSdk.then((response)=> { 
+
+      console.log(response)
       
       defaultWallet[eoa][chainId] = { address: predectedWalletAddress, deployed: true };
   
       localStorage.setItem("defaultWallet", JSON.stringify(defaultWallet))
       
       setSafeStatus(true); })
+
+    }
+    catch(e) {
+      console.log(e)
+    }  
 
     navigate(RoutePath.wallet)
   

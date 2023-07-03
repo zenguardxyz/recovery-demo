@@ -366,6 +366,11 @@ setWebAuthnData(registration);
                 image: Gnosis
               },
               {
+                value: '137',
+                label: "Polygon Mainnet",
+                image: Polygon
+              },
+              {
                 value: '84531',
                 label: "Base Testnet",
                 image: Base

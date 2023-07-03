@@ -13,9 +13,6 @@ import { TimeUtil } from "utils/time";
 export async function createContractTransaction( safeInstance: Safe, contractAddress: string, contractABI: any, signerOrProvider: Signer | Provider, method: string, params?: Array<any>): Promise<SafeTransaction> {
 
 
-
-    console.log(contractABI)
-
     const NFTInstance = new Contract(contractAddress, contractABI, signerOrProvider)
 
     let addGuardian =  NFTInstance.interface.encodeFunctionData(method, params)

@@ -225,6 +225,7 @@ export const VoucherDetailsScreen = () => {
                     <Image
                     src={
               { 100: Gnosis, 
+                137: Polygon,
                 84531: Base,
                 5: ETH
               }[chainId as number]} width={28} /> 
