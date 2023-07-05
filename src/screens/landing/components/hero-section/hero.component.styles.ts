@@ -21,12 +21,13 @@ export const useStyles = createStyles((theme) => ({
 }));
 
 export const HeroSectionContainer = styled.section`
+ 
   height: 50vh;
   img {
     width: 80%;
   }
-  .mantine-Modal-body {
-    background-color: red !important;
+  .mantine-Modal-content {
+    background-color: #120e0e !important;
   }
   .hero {
     display: grid;
@@ -37,10 +38,11 @@ export const HeroSectionContainer = styled.section`
     gap: 4rem;
   }
   .hero-form {
+
     justify-self: start;
     h1 {
       font-weight: 600;
-      font-size: 48px;
+      font-size: 45px;
       line-height: 60px;
       color: #fff;
       margin-top: 4rem;
@@ -56,6 +58,18 @@ export const HeroSectionContainer = styled.section`
       line-height: 30px;
       color: #b3b4b7;
       margin-bottom: 3rem;
+    }
+    .highlight {
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 30px;
+      color: #fff;
+    }
+    .safe {
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 30px;
+      color: #12ff80;
     }
     p {
       margin-top: 2rem;
@@ -78,7 +92,7 @@ export const HeroSectionContainer = styled.section`
     }
   }
   @media (max-width: 768px) {
-    margin-bottom: 0rem;
+    margin-bottom: 25rem;
     .hero-image {
       visibility: hidden;
       align-items: flex-end;
@@ -97,7 +111,7 @@ export const HeroSectionContainer = styled.section`
   }
   /* mobile-device */
   @media (max-width: 576px) {
-    margin-bottom: 0rem;
+    margin-bottom: 25rem;
     .hero {
       grid-template-columns: 1fr;
       padding: 2rem;
@@ -132,7 +146,6 @@ export const StyledInput = styled.input`
   min-width: 381.86px;
   width: 100%;
   height: 46.08px;
-  background: #f0f2f7;
   border-radius: 5px;
   font-size: 1.6rem;
   padding: 1rem;
@@ -181,10 +194,22 @@ export const WaitlistFormContainer = styled.div`
   margin-top: 2rem;
 `;
 
+// export const StyledButton = styled(Button)`
+//   margin-top: 2rem;
+//   width: 100%;
+// `;
+
 export const StyledButton = styled(Button)`
-  margin-top: 2rem;
-  width: 100%;
+  box-shadow: 0 0 10px #61FF47;
+  background: #20283D;
 `;
+
+export const SimpleButton = styled(Button)`
+
+box-shadow: 0 0 2px #61FF47;
+  background: #20283D;
+`;
+
 
 export const SubscriptionSuccess = styled.div`
   padding: 2rem;

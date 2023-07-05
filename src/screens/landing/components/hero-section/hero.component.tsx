@@ -1,9 +1,9 @@
 // @ts-nocheck
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Modal } from "@mantine/core";
+import { Modal} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { HeroSectionContainer, useStyles } from "./hero.component.styles";
+import { HeroSectionContainer, useStyles, SimpleButton, StyledButton } from "./hero.component.styles";
 import HeroImage from "../../assets/images/zen-hero.png";
 import { StyledSpan } from "../common/span/span.component";
 import { Button } from "../common/button/button.component";
@@ -15,7 +15,6 @@ import { SafeAuthKit, SafeAuthProviderType, SafeAuthSignInData } from '@safe-glo
 
 export function HeroSection({}) {
 
-  const [email, setEmail] = useState("");
   const [opened, setOpened] = useState(false);
 
   const { classes } = useStyles();
@@ -35,21 +34,18 @@ export function HeroSection({}) {
       <div className="hero">
         <div className="hero-form">
           <h1>
-          Own a  <StyledSpan> wallet </StyledSpan> that <br/> you can   
-            <StyledSpan> never  </StyledSpan>{" "}  lose
+          Programmable   <StyledSpan>  Wallet </StyledSpan> <br/>  For Your   
+            <StyledSpan> Peace  </StyledSpan>{" "}  of Mind
           </h1>
           <p className="sub-heading">
-          First ever  smart contract wallet SDK to provide  <br/>  wallet recovery using biometrics. <p> Powered by <StyledSpan> Safe </StyledSpan> , enabled by  <StyledSpan> Account Abstraction </StyledSpan> 🛡️ </p>
+          Smart contract Wallet SDK where  recovery made <span className="highlight">secure</span>, <br/> features made <span className="highlight">programmble</span>, onboarding made <span className="highlight">simple</span>  <p>  <br/> Powered by <span className="safe"> Safe </span>, enabled by  <StyledSpan> Account Abstraction </StyledSpan> 🛡️ </p>
           </p>
           <div className="form-group">
-            {/* <input
-              type="text"
-              placeholder="Enter an email where we can reach you ✉️"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />{" "} */}
-            <Button onClick={ ()=>navigate(RoutePath.login)}>Try Demo</Button>
+
+            <Button  onClick={ ()=>navigate(RoutePath.login)}>Try Demo</Button>
+            <SimpleButton onClick={ ()=> setOpened(true)}>Try SDK</SimpleButton>
             <Modal
+              sx={{ alignItems: "center" }}
               size={isMobile ? "350px" : "600px"}
               padding="40px"
               centered
@@ -62,10 +58,9 @@ export function HeroSection({}) {
               withCloseButton={false}
             >
               <div className="waitlist-form">
-                <WaitListForm email={email} />
+                <WaitListForm  />
               </div>
             </Modal>
-            ;
           </div>
         </div>
         <div className="hero-image">

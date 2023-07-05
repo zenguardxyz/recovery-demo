@@ -11,6 +11,7 @@ import {
   IconMoonStars,
   IconBrandDiscord,
   IconBrandGithub,
+  IconBrandTwitter,
 } from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
@@ -60,6 +61,14 @@ export function NavBar() {
            {/* <li> */}
            <ul >
           <li>
+            <a href="https://docs.zenguard.xyz" className="styled-link" target="_blank">
+              Docs
+            </a>
+          </li>
+ 
+        </ul>
+        <ul >
+          <li>
             <NavLink to="/teams" className="styled-link">
               About Us
             </NavLink>
@@ -71,7 +80,7 @@ export function NavBar() {
               className={classes.buttonContainer}
               // variant="filled"
               component="a"
-              href="https://discord.safient.io/"
+              href="https://discord.zenguard.xyz"
               title="Discord"
               target="_blank"
             >
@@ -90,6 +99,20 @@ export function NavBar() {
             >
               <>
                 <IconBrandGithub size={18} color="white"/>
+              </>
+              {/* <Image src={GitHub} height={18} width={18} /> */}
+            </ActionIcon>
+
+            <ActionIcon
+              className={classes.buttonContainer}
+              // variant="filled"
+              component="a"
+              href="https://twitter.com/zenguardxyz"
+              title="twitter"
+              target="_blank"
+            >
+              <>
+                <IconBrandTwitter size={18} color="white"/>
               </>
               {/* <Image src={GitHub} height={18} width={18} /> */}
             </ActionIcon>
