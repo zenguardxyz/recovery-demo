@@ -98,8 +98,8 @@ export const CreateRecoveryForm = () => {
 
     
     const web3auth = new Web3Auth({
-      clientId: 'BAcCop_qaWVfw15peOnVq8xd8KefD3UvZ-3bKip0RNy0w1J0Z8ZKNNzWiFW97a66S-UGr-oZpzdk1hE8SwWmy00',
-      web3AuthNetwork: 'testnet',
+      clientId: process.env.REACT_APP_W3AUTH_CLIENTID!,
+      web3AuthNetwork: 'aqua',
       chainConfig: {
         chainNamespace: CHAIN_NAMESPACES.EIP155,
         chainId: "0x14A33",

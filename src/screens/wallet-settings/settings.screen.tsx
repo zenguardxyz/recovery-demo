@@ -22,7 +22,7 @@ import {
   useMantineTheme
 } from "@mantine/core";
 
-import { IconHammer, IconFingerprint, IconMail, IconDatabase, IconScan, IconGitBranch, IconX, IconPlugConnected } from '@tabler/icons';
+import { IconHammer, IconFingerprint, IconMail, IconDatabase, IconScan, IconGitBranch, IconX, IconPlugConnected, IconAlertCircle } from '@tabler/icons';
 
 // import Safe, { SafeFactory } from "@safe-global/safe-core-sdk";
 import Safe, { getSafeContract, EthersAdapter, SafeFactory } from '@safe-global/protocol-kit';
@@ -32,7 +32,7 @@ import { GelatoRelayPack } from '@safe-global/relay-kit'
 import SafeApiKit from "@safe-global/api-kit";
 import { BackButton, EmptyState, Image } from "components";
 import { Contract, ethers } from "ethers";
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import useRecoveryStore from "store/recovery/recovery.store";
@@ -104,9 +104,47 @@ export const WalletSettings = () => {
   const [creating, setCreating] = useState(false);
   const [ guard, setGuard ] = useState(false);
   const [registering, setRegistering] = useState(false);
+  const [recovery, setRecovery] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [executedHash, setExecutedHash] = useState("");
   
+
+  useEffect(() => {
+
+    
+
+    ;(async () => {
+
+      try {
+
+        const safeOwner = new ethers.providers.Web3Provider(accountDetails.provider as ethers.providers.ExternalProvider).getSigner(0)
+        const ethAdapter = new EthersAdapter({
+          ethers,
+          signerOrProvider:safeOwner
+        })
+
+
+
+        const safeInstance: Safe = await Safe.create({ ethAdapter, safeAddress: safeId })
+
+        const modules = await safeInstance.getModules()
+
+        if(modules.length) { 
+
+          setRecovery(true);
+
+        }
+
+    
+      }
+      catch(e) {
+
+      }
+
+  
+    })()
+  }, [])
+
 
   const pairClient = async () => {
 
@@ -196,7 +234,6 @@ setWebAuthnData(registration);
 
     const safeInstance: Safe = await Safe.create({ ethAdapter, safeAddress: safeId })
 
-
     let signedSafeTx = await createModuleEnableTransaction(safeInstance, recModule )
 
     setCreating(false);
@@ -221,6 +258,7 @@ setWebAuthnData(registration);
     setConfirming(false);
     await TimeUtil.sleep(2000)
     setConfirmed(false);
+    setRecovery(true);
   }
   catch(e) {
     console.log(e)
@@ -490,7 +528,7 @@ setWebAuthnData(registration);
         },
       ]}
     />
-         { recoveryType == 'email' && <TextInput
+         { recoveryType == 'email' && !recovery && <TextInput
             type="email"
             placeholder="Enter Beneficiary email"
             label="Beneficiary Email"
@@ -502,7 +540,12 @@ setWebAuthnData(registration);
 
           }
 
-        { recoveryType == 'biometric' && <>
+{ recovery && <Alert icon={<IconCheck size="10rem" />}  title="Account recovery is set 🛡️" color="green" >
+     Your wallet account is secured with the ZenGuard recovery.
+    </Alert>  
+  }
+
+        { recoveryType == 'biometric' && !recovery && <>
         
         
         <Group sx={{ justifyContent: "space-between" }}>
@@ -575,6 +618,7 @@ setWebAuthnData(registration);
 
           }
 
+{ !recovery && <>
     <Switch
         checked={guard}
         onChange={(event) => setGuard(event.currentTarget.checked)}
@@ -624,7 +668,7 @@ setWebAuthnData(registration);
           </>
           }
 
-        <Button
+      <Button
             loading={creating}
             disabled={recoveryType == 'biometric' && (!walletBeneficiary || !registrationSuccess) || recoveryType == 'email' && !walletBeneficiary  }
             onClick={() => {
@@ -636,7 +680,9 @@ setWebAuthnData(registration);
             }}
           >
             Create Recovery
-          </Button>
+          </Button> 
+         </>  
+         }
 
           { executedHash && <Alert icon={<IconCheck size={32} />} title="Recovery created!" color="green" radius="lg">
             Recovery successfully created for the wallet. Verify <a href={`${NetworkUtil.getNetworkById(chainId)?.blockExplorer}/tx/${executedHash}`} target="_blank">here</a>

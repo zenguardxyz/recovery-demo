@@ -38,7 +38,7 @@ export function HeroSection({}) {
             <StyledSpan> Peace  </StyledSpan>{" "}  of Mind
           </h1>
           <p className="sub-heading">
-          Smart contract Wallet SDK where  recovery made <span className="highlight">secure</span>, <br/> features made <span className="highlight">programmble</span>, onboarding made <span className="highlight">simple</span>  <p>  <br/> Powered by <span className="safe"> Safe </span>, enabled by  <StyledSpan> Account Abstraction </StyledSpan> 🛡️ </p>
+          Smart contract Wallet SDK where recovery made <span className="highlight">secure</span>, <br/> features made <span className="highlight">programmble</span>, onboarding made <span className="highlight">simple</span>  <p>  <br/> Powered by <span className="safe"> Safe </span>, enabled by  <StyledSpan> Account Abstraction </StyledSpan> 🛡️ </p>
           </p>
           <div className="form-group">
 

@@ -83,7 +83,7 @@ export const UserAuth = () => {
     setCreating(true);
     const web3auth = new Web3Auth({
       clientId: process.env.REACT_APP_W3AUTH_CLIENTID!,
-      web3AuthNetwork: 'testnet',
+      web3AuthNetwork: 'aqua',
       chainConfig: {
         chainNamespace: CHAIN_NAMESPACES.EIP155,
         chainId: '0x' + NetworkUtil.getNetworkById(chainId)?.chainId.toString(16),
