@@ -43,7 +43,8 @@ export function HeroSection({}) {
           <div className="form-group">
 
             <Button  onClick={ ()=>navigate(RoutePath.login)}>Try Demo</Button>
-            <SimpleButton onClick={ ()=> setOpened(true)}>Try SDK</SimpleButton>
+            {/* <SimpleButton onClick={ ()=> setOpened(true)}>Explore Plugins</SimpleButton> */}
+            <SimpleButton onClick={ ()=> window.location = "https://garden.zenguard.xyz"}>Explore Plugins</SimpleButton>
             <Modal
               sx={{ alignItems: "center" }}
               size={isMobile ? "350px" : "600px"}

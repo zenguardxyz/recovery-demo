@@ -60,7 +60,7 @@ export const Account = () => {
 
 
       var authStore = localStorage.getItem("openlogin_store");
-      if(authStore && JSON.parse(authStore).idToken) {
+      if(authStore && JSON.parse(authStore).sessionId) {
         setAuthDetails(JSON.parse(authStore))
          
       }
