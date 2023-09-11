@@ -117,9 +117,9 @@ export const Features = () => {
           <IconContainer>
               <img src={Plugin} width="70px" alt='icon' />
             </IconContainer>
-          <h3 class="heading-tertiary">Programmable plugins</h3>
+          <h3 class="heading-tertiary">Plugin marketplace</h3>
           <p class="step-description">
-          Wallets are extensible via plugins to add desired functionalities.
+          Desired functionalities can be enabled on wallet via verified plugin marketplace
           </p>
         </div>
         <div class="step-cards">

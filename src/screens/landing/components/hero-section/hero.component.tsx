@@ -34,15 +34,15 @@ export function HeroSection({}) {
       <div className="hero">
         <div className="hero-form">
           <h1>
-          Programmable   <StyledSpan>  Wallet </StyledSpan> <br/>  For Your   
-            <StyledSpan> Peace  </StyledSpan>{" "}  of Mind
+          Elevate your   <StyledSpan>  Smart Accounts </StyledSpan> <br/>  with 
+            <StyledSpan> Smarter Plugin  </StyledSpan>{" "}  Marketplace
           </h1>
           <p className="sub-heading">
-          Smart contract Wallet SDK where recovery made <span className="highlight">secure</span>, <br/> features made <span className="highlight">programmble</span>, onboarding made <span className="highlight">simple</span>  <p>  <br/> Powered by <span className="safe"> Safe </span>, enabled by  <StyledSpan> Account Abstraction </StyledSpan> 🛡️ </p>
+          Extending your smart accounts is now as <span className="highlight">easy</span> <br/> and <span className="highlight">secure</span> as installing an app on your smart phone  <p>  <br/> Powered by <span className="safe"> Safe </span>, enabled by  <StyledSpan> Modular Account Abstraction </StyledSpan> 🛡️ </p>
           </p>
           <div className="form-group">
 
-            <Button  onClick={ ()=>navigate(RoutePath.login)}>Try Demo</Button>
+            <Button  onClick={ ()=>navigate(RoutePath.login)}>Plugin Demo</Button>
             {/* <SimpleButton onClick={ ()=> setOpened(true)}>Explore Plugins</SimpleButton> */}
             <SimpleButton onClick={ ()=> window.location = "https://garden.zenguard.xyz"}>Explore Plugins</SimpleButton>
             <Modal

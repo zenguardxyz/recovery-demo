@@ -42,7 +42,7 @@ export const HeroSectionContainer = styled.section`
     justify-self: start;
     h1 {
       font-weight: 600;
-      font-size: 45px;
+      font-size: 39px;
       line-height: 60px;
       color: #fff;
       margin-top: 4rem;
@@ -53,8 +53,8 @@ export const HeroSectionContainer = styled.section`
       gap: 1.8rem;
     }
     .sub-heading {
-      font-weight: 500;
-      font-size: 20px;
+      font-weight: 450;
+      font-size: 18px;
       line-height: 30px;
       color: #b3b4b7;
       margin-bottom: 3rem;
