@@ -86,9 +86,10 @@ export const HeroSectionContainer = styled.section`
     }
   }
   .hero-image {
-    align-items: flex-end;
+    align-items: center;
+    text-align: center;
     img {
-      width: 80%;
+      width: 75%;
     }
   }
   @media (max-width: 768px) {

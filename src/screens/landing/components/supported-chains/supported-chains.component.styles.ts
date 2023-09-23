@@ -3,7 +3,10 @@ import styled from "styled-components";
 export const BackedByContainer = styled.section`
   width: 100%;
   /* background-color: #181729; */
-  margin: 10rem 0;
+  margin: 10rem 0 0 0;
+  @media (max-width: 576px) {
+    margin: 35rem 0 0 0;
+  }
   h2 {
     text-align: center;
     font-size: 36px;
