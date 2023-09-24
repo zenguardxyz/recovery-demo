@@ -5,6 +5,7 @@ import { Modal} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { HeroSectionContainer, useStyles, SimpleButton, StyledButton } from "./hero.component.styles";
 import HeroImage from "../../assets/images/zen-hero.svg";
+import HeroImageMob from "../../assets/images/hero-mobile.svg";
 import { StyledSpan } from "../common/span/span.component";
 import { Button } from "../common/button/button.component";
 import { WaitListForm } from "./mailchimp";
@@ -36,15 +37,28 @@ export function HeroSection({}) {
           <h1>
           Elevate your   <StyledSpan>  Smart Accounts </StyledSpan> <br/>  with 
             <StyledSpan> Smarter Plugin  </StyledSpan>{" "}  Marketplace
+            
           </h1>
+          
           <p className="sub-heading">
-          Extending your smart accounts is now as <span className="highlight">easy</span> <br/> and <span className="highlight">secure</span> as installing an app on your smart phone  <p>  <br/> Powered by <span className="safe"> Safe </span>, enabled by  <StyledSpan> Modular Account Abstraction </StyledSpan> 🛡️ </p>
+          Extending your smart accounts is now as <span className="highlight">easy</span> <br/> and <span className="highlight">secure</span> as installing an app on your smart phone 
+          
+          <div className="hero-image-mobile">
+          <img src={HeroImageMob} alt="Person with voucher" />
+        </div>
+            
           </p>
+          
           <div className="form-group">
+
+         
 
             <Button  onClick={ ()=>navigate(RoutePath.login)}>Plugin Demo</Button>
             {/* <SimpleButton onClick={ ()=> setOpened(true)}>Explore Plugins</SimpleButton> */}
             <SimpleButton onClick={ ()=> window.location = "https://garden.zenguard.xyz"}>Explore Plugins</SimpleButton>
+
+            
+            
             <Modal
               sx={{ alignItems: "center" }}
               size={isMobile ? "350px" : "600px"}
@@ -63,6 +77,7 @@ export function HeroSection({}) {
               </div>
             </Modal>
           </div>
+          <p>  <br/> Powered by <span className="safe"> Safe </span>, enabled by  <StyledSpan> Modular Account Abstraction </StyledSpan> 🛡️ </p>
         </div>
         <div className="hero-image">
           <img src={HeroImage} alt="Person with voucher" />

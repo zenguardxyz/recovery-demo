@@ -92,8 +92,25 @@ export const HeroSectionContainer = styled.section`
       width: 75%;
     }
   }
+  .hero-image-mobile {
+    // visibility: hidden;
+    align-items: center;
+    text-align: center;
+    img {
+      width: 0;
+    }
+  }
   @media (max-width: 768px) {
     margin-bottom: 25rem;
+    .hero-image-mobile {
+      // visibility: hidden;
+      margin-top: 10px;
+      align-items: center;
+      text-align: center;
+      img {
+        width: 100%;
+      }
+    }
     .hero-image {
       visibility: hidden;
       align-items: flex-end;

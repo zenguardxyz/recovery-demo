@@ -3,16 +3,14 @@ import { FeaturesContainer, Steps, IconContainer, IconsContainer, FeatureCard, C
 import { SubTitle, Title } from "../common/title/title.component";
 import Onboard from "../../assets/images/onboard.svg";
 import Recovery from "../../assets/images/recovery.svg";
-import Google from "../../assets/images/google.svg";
-import Facebook from "../../assets/images/facebook.svg";
+import Deploy from "../../assets/images/deploy.svg";
 import Gasless from "../../assets/images/gasless.svg";
 import Plugin from "../../assets/images/plugin.svg";
 import Finger from "../../assets/images/finger.svg";
 import Face from "../../assets/images/faceid.svg";
-import Court from "../../assets/images/court.svg";
-import Heart from "../../assets/images/heart.svg";
-import Key from "../../assets/images/key.svg";
-import Payment from "../../assets/images/payment.svg";
+import Monetize from "../../assets/images/monetize.svg";
+import Auditor from "../../assets/images/auditor.svg";
+import Audit from "../../assets/images/audit.png";
 
 
 const data = [
@@ -44,68 +42,60 @@ export const Features = () => {
           <IconContainer>
               <img src={Onboard} width="80px" alt='icon' />
             </IconContainer>
-          <h3 class="heading-tertiary">Easy onboarding</h3>
+          <h3 class="heading-tertiary">Extended Smart Account</h3>
           <p class="step-description">
-          ZenGuard leverages account abstraction (ERC 4337) and MPC to allow gasless and keyless wallet creation
+          ZenGuard provides basic security and onboarding related plugins such as account recovery, gas sponsored transactions etc.
           </p>
         </div>
         <div class="step-cards">
         <CardsContainer>
-          <FeatureCard >
-            <>
-          <IconsContainer>
-            {/* <IconContainer> */}
-            <img src={Google} width="40px" alt='icon' />
-            {/* </IconContainer> */}
-            {/* <IconContainer> */}
-            <img src={Facebook} width="40px" alt='icon' />
-            {/* </IconContainer> */}
-            </IconsContainer>
-            <h4>Web2 authentication + 2FA </h4>
-            </>
-          </FeatureCard>
+       
           <FeatureCard >
           <IconsContainer>
             
             <img src={Gasless} width="50px" alt='icon' />
             </IconsContainer>
-            <h4>GAS less onboarding </h4>
+            <h4>GAS sponsorship </h4>
           </FeatureCard>
-          </CardsContainer>
-          </div>
-      </Steps>
-
-      <Steps>
-        <div class="step-text-box">
-          <IconContainer>
-              <img src={Recovery} width="80px" alt='icon' />
-            </IconContainer>
-          <h3 class="heading-tertiary">Secure recovery</h3>
-          <p class="step-description">
-          The wallets are recovered by the right owner/ beneficiaries at the right time.
-          </p>
-        </div>
-        <div class="step-cards">
-        <CardsContainer>
           <FeatureCard >
             <>
           <IconsContainer>
-            {/* <IconContainer> */}
             <img src={Finger} width="40px" alt='icon' />
-            {/* </IconContainer> */}
-            {/* <IconContainer> */}
             <img src={Face} width="40px" alt='icon' />
-            {/* </IconContainer> */}
             </IconsContainer>
             <h4> Biometric, OTP, Authenticator recovery </h4>
             </>
           </FeatureCard>
+          </CardsContainer>
+          </div>
+      </Steps>
+
+      <Steps>
+        <div class="step-text-box">
+          <IconContainer>
+              <img src={Plugin} width="80px" alt='icon' />
+            </IconContainer>
+          <h3 class="heading-tertiary">Developer Driven</h3>
+          <p class="step-description">
+          Tools and infra for seamless experience for plugins developers.
+          </p>
+        </div>
+        <div class="step-cards">
+        <CardsContainer>
+          <FeatureCard >
+            <>
+          <IconsContainer>
+            {/* <IconContainer> */}
+            <img src={Deploy} width="70px" alt='icon' />
+            </IconsContainer>
+            <h4> Streamlined plugin publishing</h4>
+            </>
+          </FeatureCard>
           <FeatureCard >
           <IconsContainer>
-            <img src={Heart} width="40px" alt='icon' />
-            <img src={Court} width="40px" alt='icon' />
+            <img src={Monetize} width="90px" alt='icon' />
             </IconsContainer>
-            <h4>Inheritance features</h4>
+            <h4>Incentivise the plugins</h4>
           </FeatureCard>
           </CardsContainer>
           </div>
@@ -115,11 +105,11 @@ export const Features = () => {
       <Steps>
         <div class="step-text-box">
           <IconContainer>
-              <img src={Plugin} width="70px" alt='icon' />
+              <img src={Recovery} width="70px" alt='icon' />
             </IconContainer>
-          <h3 class="heading-tertiary">Plugin marketplace</h3>
+          <h3 class="heading-tertiary"> Auditor Verified </h3>
           <p class="step-description">
-          Desired functionalities can be enabled on wallet via verified plugin marketplace
+          Verified auditors can audit and attest the plugins with audit scores and proofs.
           </p>
         </div>
         <div class="step-cards">
@@ -127,17 +117,17 @@ export const Features = () => {
           <FeatureCard >
             <>
           <IconsContainer>
-            <img src={Key} width="40px" alt='icon' />
+            <img src={Auditor} width="90px" alt='icon' />
             </IconsContainer>
-            <h4>Session keys </h4>
+            <h4>Audit labeled by top Audit firms</h4>
             </>
           </FeatureCard>
           <FeatureCard >
           <IconsContainer>
             
-            <img src={Payment} width="40px" alt='icon' />
+            <img src={Audit} width="80px" alt='icon' />
             </IconsContainer>
-            <h4> Subscription auto payments </h4>
+            <h4> Onchain verifiable audit proofs </h4>
           </FeatureCard>
           </CardsContainer>
           </div>

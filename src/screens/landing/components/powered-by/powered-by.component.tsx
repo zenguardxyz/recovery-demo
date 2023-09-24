@@ -3,7 +3,8 @@ import { BackedByContainer } from "./powered-by.component.styles";
 import { SubTitle, Title } from "../common/title/title.component";
 import Safe from "../../assets/images/safe.svg";
 import Web3Auth from "../../assets/images/web3auth.png";
-import Kleros from "../../assets/images/kleros.png";
+import Gelato from "../../assets/images/gelato.svg";
+import EAS from "../../assets/images/eas.png";
 
 export const PoweredBy = () => {
   return (
@@ -18,7 +19,8 @@ export const PoweredBy = () => {
       <div className="logo-container">
         <img src={Web3Auth} alt="web3auth" />
         <img src={Safe} alt="safe" />
-        <img src={Kleros} alt="zilliqa" />
+        <img src={Gelato} width={250} alt="gelato" />
+        <img src={EAS} width={100} alt="gelato" />
       </div>
     </BackedByContainer>
   );

@@ -38,14 +38,14 @@ export const BuiltFor = () => {
             <img src={Code} width="50px" alt='icon' />
             </IconsContainer>
             <h4>DApp developers </h4>
-            <SubTitle> The quickest and most secure way to onboard new users to DApps with smart accounts</SubTitle>
+            <SubTitle centered> The most secure way to  provide DApp features via smart accounts as verified plugins</SubTitle>
           </FeatureCard>
           <FeatureCard >
           <IconsContainer>
             <img src={Safe} width="150px" alt='icon' />
           </IconsContainer>
-            <h4>Safe wallet recovery </h4>
-            <SubTitle> Existing Safe wallet users can enhance their wallet onboarding experience and recovery features</SubTitle>
+            <h4>Safe account extensions</h4>
+            <SubTitle centered> Existing Safe account users can enhance their wallet by securely plugging new verified features via unified marketplace</SubTitle>
           </FeatureCard>
           <FeatureCard >
           <IconsContainer>
@@ -53,7 +53,7 @@ export const BuiltFor = () => {
             <img src={Module} width="60px" alt='icon' />
             </IconsContainer>
             <h4>Customized wallet experience</h4>
-            <SubTitle> Custodial or non-custodial wallets can customize their wallets with 2FA, recovery, easy onboarding features</SubTitle>
+            <SubTitle centered> Custodial or non-custodial wallets can customize their wallets with 2FA, recovery, easy onboarding features</SubTitle>
           </FeatureCard>
           </CardsContainer>
           </div>
