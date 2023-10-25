@@ -8,7 +8,7 @@ export const StyledButton = styled.button`
 	font-weight: 600;
 	font-size: 16px;
 	color: #fff;
-	background: linear-gradient(132.56deg, #61FF47 -20.89%, #89B8FF 99.53%, #FF70F1 123.47%);
+	background: #7CC562;
 	border-radius: 5px;
 	cursor: pointer;
 `;

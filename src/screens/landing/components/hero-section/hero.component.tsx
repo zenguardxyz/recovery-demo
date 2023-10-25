@@ -35,8 +35,9 @@ export function HeroSection({}) {
       <div className="hero">
         <div className="hero-form">
           <h1>
-          Elevate your   <StyledSpan>  Smart Accounts </StyledSpan> <br/>  with 
-            <StyledSpan> Smarter Plugin  </StyledSpan>{" "}  Marketplace
+
+            <StyledSpan> Smarter Plugin  </StyledSpan>{" "}  Marketplace <br/> For your
+            <StyledSpan>  Smart Accounts </StyledSpan>
             
           </h1>
           

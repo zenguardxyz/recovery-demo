@@ -12,7 +12,7 @@ export const StyledNav = styled.nav`
     justify-content: space-between;
   }
   .logo {
-    width: 180px;
+    width: 220px;
   }
   .nav-menu {
     display: flex;
