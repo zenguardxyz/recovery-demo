@@ -14,14 +14,16 @@ import {
 } from "@mantine/core";
 import { GoogleButton, MetaMaskButton } from "../../components";
 
-import { SafeEventEmitterProvider, CHAIN_NAMESPACES } from '@web3auth/base'
-import { SafeAuthKit, SafeAuthProviderType, SafeAuthSignInData } from '@safe-global/auth-kit'
+import { SafeEventEmitterProvider, CHAIN_NAMESPACES, WALLET_ADAPTERS } from '@web3auth/base'
+import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
+import { Web3AuthModalPack } from '@safe-global/auth-kit'
 
 
 import { RoutePath } from "navigation";
 
 import useRecoveryStore from "store/recovery/recovery.store";
 import { NetworkUtil } from "utils/networks";
+import { Web3AuthOptions } from "@web3auth/modal";
 
 export function LoginScreen(props: any) {
 
@@ -39,30 +41,81 @@ export function LoginScreen(props: any) {
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [safeAuthSignInResponse, setSafeAuthSignInResponse] = useState<SafeAuthSignInData | null>(
+  const [safeAuthSignInResponse, setSafeAuthSignInResponse] = useState<any>(
     null
   )
-  const [safeAuth, setSafeAuth] = useState<SafeAuthKit>()
+  const [safeAuth, setSafeAuth] = useState<any>()
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null)
 
 
   const authenticateUser = async (signin=false) => {
 
-    const safeAuth =  await SafeAuthKit.init(SafeAuthProviderType.Web3Auth, {
-          
-      chainId: '0x' + NetworkUtil.getNetworkById(chainId)?.chainId.toString(16),
-      txServiceUrl:  NetworkUtil.getNetworkById(chainId)?.safeService, // Optional. Only if want to retrieve related safes
-      authProviderConfig: {
+
+    console.log(process.env.REACT_APP_W3AUTH_CLIENTID)
+
+    const options: Web3AuthOptions = {
+      clientId: process.env.REACT_APP_W3AUTH_CLIENTID || '',
+      web3AuthNetwork: 'testnet',
+      chainConfig: {
+        chainNamespace: CHAIN_NAMESPACES.EIP155,
+        chainId: '0x' + NetworkUtil.getNetworkById(chainId)?.chainId.toString(16),
         rpcTarget: NetworkUtil.getNetworkById(chainId)!.url,
-        clientId: process.env.REACT_APP_W3AUTH_CLIENTID!,
-        network: 'aqua',
-        theme: 'dark'
+      },
+      uiConfig: {
+        theme: 'dark',
+        loginMethodsOrder: ['google', 'facebook']
+      }
+    }
+
+    const modalConfig = {
+      [WALLET_ADAPTERS.TORUS_EVM]: {
+        label: 'torus',
+        showOnModal: false
+      },
+      [WALLET_ADAPTERS.METAMASK]: {
+        label: 'metamask',
+        showOnDesktop: true,
+        showOnMobile: false
+      }
+    }
+
+    const openloginAdapter = new OpenloginAdapter({
+      loginSettings: {
+        mfaLevel: 'mandatory'
+      },
+      adapterSettings: {
+        uxMode: 'popup',
+        whiteLabel: {
+          name: 'Safe'
+        }
       }
     })
 
-    const response = signin ? await safeAuth?.signIn() : null;
+    const web3AuthModalPack = new Web3AuthModalPack({
+      txServiceUrl: NetworkUtil.getNetworkById(chainId)?.safeService
+    })
 
-    return { response: response, auth: safeAuth}
+    await web3AuthModalPack.init({ options, adapters: [openloginAdapter], modalConfig })
+
+    // const safeAuth =  await SafeAuthKit.init(SafeAuthProviderType.Web3Auth, {
+          
+    //   chainId: '0x' + NetworkUtil.getNetworkById(chainId)?.chainId.toString(16),
+    //   txServiceUrl:  NetworkUtil.getNetworkById(chainId)?.safeService, // Optional. Only if want to retrieve related safes
+    //   authProviderConfig: {
+    //     rpcTarget: NetworkUtil.getNetworkById(chainId)!.url,
+    //     clientId: process.env.REACT_APP_W3AUTH_CLIENTID!,
+    //     network: 'aqua',
+    //     theme: 'dark'
+    //   }
+    // })
+
+    console.log('asdadadas asd')
+    const response = signin ? await web3AuthModalPack?.signIn() : null;
+
+    console.log('asdadadas asd')
+    console.log(response)
+
+    return { response: response, auth: web3AuthModalPack}
   }
 
 
@@ -71,6 +124,7 @@ export function LoginScreen(props: any) {
 
 
       var authStore = localStorage.getItem("openlogin_store");
+      console.log(authStore)
       if(authStore && JSON.parse(authStore).idToken) {
          navigate(RoutePath.account)
       }
@@ -78,6 +132,7 @@ export function LoginScreen(props: any) {
       setLoginStatus(false);
       
       const safeA =  await authenticateUser(false);
+      console.log(safeA)
       setLoginStatus(true);
       setSafeAuth(safeA.auth);
       }

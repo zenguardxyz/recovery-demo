@@ -24,6 +24,6 @@ export const AppLayout: React.FC<AppLayoutProps> = (props) => {
     
   >
    <Container>{children}</Container>
-  </AppShell>
+  // </AppShell>
   );
 };

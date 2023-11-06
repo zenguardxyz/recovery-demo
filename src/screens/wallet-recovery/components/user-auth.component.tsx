@@ -38,7 +38,6 @@ import SafeServiceClient from "@safe-global/safe-service-client";
 import { Contract } from "ethers";
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types";
 import { RoutePath } from "navigation";
-import { SafeAuthKit, SafeAuthProviderType } from "@safe-global/auth-kit";
 import axios from "axios";
 import { NetworkUtil } from "utils/networks";
 
@@ -66,8 +65,6 @@ export const UserAuth = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [creating, setCreating] = useState(false);
 
-  const [safeAuth, setSafeAuth] = useState<SafeAuthKit>()
-  const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null)
 
   const { setCreateStep, setFormData, accountDetails, setSafeId } = useRecoveryStore(
     (state: any) => state

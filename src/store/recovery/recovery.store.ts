@@ -7,7 +7,7 @@ const useRecoveryStore = create((set) => ({
   accountDetails: {},
   authDetails: {},
   safeId: '',
-  chainId:  localStorage.getItem("chainId") ? parseInt(localStorage.getItem("chainId")!) : 84531,
+  chainId:  localStorage.getItem("chainId") ? parseInt(localStorage.getItem("chainId")!) : 5,
   safeStatus: true,
   confirming: false,
   confirmed: false,

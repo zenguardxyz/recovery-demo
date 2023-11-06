@@ -56,7 +56,7 @@ export function HeroSection({}) {
 
             <Button  onClick={ ()=>navigate(RoutePath.login)}>Plugin Demo</Button>
             {/* <SimpleButton onClick={ ()=> setOpened(true)}>Explore Plugins</SimpleButton> */}
-            <SimpleButton onClick={ ()=> window.location = "https://garden.zenguard.xyz"}>Explore Plugins</SimpleButton>
+            <SimpleButton onClick={ ()=> window.location = "https://explore.zenguard.xyz"}>Explore Plugins</SimpleButton>
 
             
             

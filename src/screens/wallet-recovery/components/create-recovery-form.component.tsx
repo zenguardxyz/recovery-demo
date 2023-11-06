@@ -40,7 +40,7 @@ import SafeServiceClient from "@safe-global/safe-service-client";
 import { Contract } from "ethers";
 import { SafeTransactionDataPartial } from "@safe-global/safe-core-sdk-types";
 import { RoutePath } from "navigation";
-import { SafeAuthKit, SafeAuthProviderType } from "@safe-global/auth-kit";
+// import { SafeAuthKit, SafeAuthProviderType } from "@safe-global/auth-kit";
 import { NetworkUtil } from "utils/networks";
 
 
@@ -63,7 +63,7 @@ export const CreateRecoveryForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [creating, setCreating] = useState(false);
 
-  const [safeAuth, setSafeAuth] = useState<SafeAuthKit>()
+  const [safeAuth, setSafeAuth] = useState<any>()
   const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(null)
 
   const { setCreateStep, setFormData, accountDetails, setSafeId } = useRecoveryStore(
@@ -75,19 +75,19 @@ export const CreateRecoveryForm = () => {
 
   useEffect(() => {
     ;(async () => {
-      await setSafeAuth(
-        await SafeAuthKit.init(SafeAuthProviderType.Web3Auth, {
+      // await setSafeAuth(
+      //   await SafeAuthKit.init(SafeAuthProviderType.Web3Auth, {
           
-          chainId: '0x' + NetworkUtil.getNetworkById(chainId)?.chainId.toString(16),
-          txServiceUrl: '0x' + NetworkUtil.getNetworkById(chainId)?.safeService, // Optional. Only if want to retrieve related safes
-          authProviderConfig: {
-            rpcTarget: NetworkUtil.getNetworkById(chainId)?.url!,
-            clientId: 'BAcCop_qaWVfw15peOnVq8xd8KefD3UvZ-3bKip0RNy0w1J0Z8ZKNNzWiFW97a66S-UGr-oZpzdk1hE8SwWmy00',
-            network: 'testnet',
-            theme: 'dark'
-          }
-        })
-      )
+      //     chainId: '0x' + NetworkUtil.getNetworkById(chainId)?.chainId.toString(16),
+      //     txServiceUrl: '0x' + NetworkUtil.getNetworkById(chainId)?.safeService, // Optional. Only if want to retrieve related safes
+      //     authProviderConfig: {
+      //       rpcTarget: NetworkUtil.getNetworkById(chainId)?.url!,
+      //       clientId: 'BAcCop_qaWVfw15peOnVq8xd8KefD3UvZ-3bKip0RNy0w1J0Z8ZKNNzWiFW97a66S-UGr-oZpzdk1hE8SwWmy00',
+      //       network: 'testnet',
+      //       theme: 'dark'
+      //     }
+      //   })
+      // )
     })()
   }, [])
 

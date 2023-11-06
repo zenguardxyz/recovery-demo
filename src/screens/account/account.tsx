@@ -2,9 +2,12 @@ import { useEffect } from "react";
 import useRecoveryStore from "../../store/recovery/recovery.store";
 import { useNavigate } from "react-router-dom";
 import { RoutePath } from "navigation/route-path";
-import { SafeAuthKit, SafeAuthProviderType } from "@safe-global/auth-kit";
+import { Web3AuthModalPack } from "@safe-global/auth-kit";
 import { NetworkUtil } from "utils/networks";
 import { VoucherDetailsShimmer } from "screens/voucher-details/voucher-details.shimmer";
+import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
+import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from "@web3auth/base";
+import { Web3AuthOptions } from "@web3auth/modal";
 
 export const Account = () => {
   
@@ -34,24 +37,72 @@ export const Account = () => {
 
     }
 
-    const authenticateUser = async (signin=false ) => {
+    const authenticateUser = async (signin=false) => {
 
-        const safeAuth =  await SafeAuthKit.init(SafeAuthProviderType.Web3Auth, {
-              
+      const options: Web3AuthOptions = {
+        clientId: process.env.REACT_APP_W3AUTH_CLIENTID || '',
+        web3AuthNetwork: 'testnet',
+        chainConfig: {
+          chainNamespace: CHAIN_NAMESPACES.EIP155,
           chainId: '0x' + NetworkUtil.getNetworkById(chainId)?.chainId.toString(16),
-          txServiceUrl:  NetworkUtil.getNetworkById(chainId)?.safeService, // Optional. Only if want to retrieve related safes
-          authProviderConfig: {
-            rpcTarget: NetworkUtil.getNetworkById(chainId)!.url,
-            clientId: process.env.REACT_APP_W3AUTH_CLIENTID!,
-            network: 'aqua',
-            theme: 'dark'
-          }
-        })
-    
-        const response = signin ? await safeAuth?.signIn() : null;
-    
-        return { response: response, auth: safeAuth}
+          rpcTarget: NetworkUtil.getNetworkById(chainId)!.url,
+        },
+        uiConfig: {
+          theme: 'dark',
+          loginMethodsOrder: ['google', 'facebook']
+        }
       }
+  
+      const modalConfig = {
+        [WALLET_ADAPTERS.TORUS_EVM]: {
+          label: 'torus',
+          showOnModal: false
+        },
+        [WALLET_ADAPTERS.METAMASK]: {
+          label: 'metamask',
+          showOnDesktop: true,
+          showOnMobile: false
+        }
+      }
+  
+      const openloginAdapter = new OpenloginAdapter({
+        loginSettings: {
+          mfaLevel: 'mandatory'
+        },
+        adapterSettings: {
+          uxMode: 'popup',
+          whiteLabel: {
+            name: 'Safe'
+          }
+        }
+      })
+  
+      const web3AuthModalPack = new Web3AuthModalPack({
+        txServiceUrl: 'https://safe-transaction-goerli.safe.global'
+      })
+  
+      await web3AuthModalPack.init({ options, adapters: [openloginAdapter], modalConfig })
+  
+      // const safeAuth =  await SafeAuthKit.init(SafeAuthProviderType.Web3Auth, {
+            
+      //   chainId: '0x' + NetworkUtil.getNetworkById(chainId)?.chainId.toString(16),
+      //   txServiceUrl:  NetworkUtil.getNetworkById(chainId)?.safeService, // Optional. Only if want to retrieve related safes
+      //   authProviderConfig: {
+      //     rpcTarget: NetworkUtil.getNetworkById(chainId)!.url,
+      //     clientId: process.env.REACT_APP_W3AUTH_CLIENTID!,
+      //     network: 'aqua',
+      //     theme: 'dark'
+      //   }
+      // })
+  
+      console.log('asdadadas asd')
+      const response = signin ? await web3AuthModalPack?.signIn() : null;
+  
+      console.log('asdadadas asd')
+      console.log(response)
+  
+      return { response: response, auth: web3AuthModalPack}
+    }
     
 
     useEffect(() => {
