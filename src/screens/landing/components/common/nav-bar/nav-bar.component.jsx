@@ -67,14 +67,14 @@ export function NavBar() {
           </li>
  
         </ul>
-        <ul >
-          <li>
+        {/* <ul > */}
+          {/* <li>
             <NavLink to="/teams" className="styled-link">
               About Us
             </NavLink>
-          </li>
+          </li> */}
  
-        </ul>
+        {/* </ul> */}
           {/* </li> */}
             <ActionIcon
               className={classes.buttonContainer}

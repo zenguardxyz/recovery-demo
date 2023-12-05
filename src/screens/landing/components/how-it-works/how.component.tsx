@@ -11,7 +11,7 @@ export function HowItWorksSection() {
       <SubTitle centered className="sub-heading">
         Follow these simple steps to get started 🪜
 
-        <YoutubeEmbed embedId="fiQcLBmHa98" />
+        <YoutubeEmbed embedId="myIRwe1k3y8" />
       </SubTitle>
 
 
