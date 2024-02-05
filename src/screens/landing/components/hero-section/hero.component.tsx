@@ -36,7 +36,7 @@ export function HeroSection({}) {
         <div className="hero-form">
           <h1>
 
-            <StyledSpan> Smarter Plugin  </StyledSpan>{" "}  Marketplace <br/> For your
+            <StyledSpan> Smarter Module  </StyledSpan>{" "}  Marketplace <br/> For your
             <StyledSpan>  Smart Accounts </StyledSpan>
             
           </h1>
@@ -54,9 +54,9 @@ export function HeroSection({}) {
 
          
 
-            <Button  onClick={ ()=>navigate(RoutePath.login)}>Plugin Demo</Button>
+            <Button  onClick={ ()=> window.open("https://safe2link.xyz")}>Module Demo</Button>
             {/* <SimpleButton onClick={ ()=> setOpened(true)}>Explore Plugins</SimpleButton> */}
-            <SimpleButton onClick={ ()=> window.location = "https://explore.zenguard.xyz"}>Explore Plugins</SimpleButton>
+            <SimpleButton onClick={ ()=> window.open("https://app.safe.global/share/safe-app?appUrl=https://explore.zenguard.xyz&chain=sep")}>Explore Modules</SimpleButton>
 
             
             

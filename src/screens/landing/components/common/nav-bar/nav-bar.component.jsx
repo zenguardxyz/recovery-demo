@@ -61,21 +61,21 @@ export function NavBar() {
            {/* <li> */}
            <ul >
           <li>
+            <a href="https://dashboard.zenguard.xyz" className="styled-link" target="_blank">
+              Dashboard
+            </a>
+          </li>
+ 
+        </ul>
+        <ul >
+          <li>
             <a href="https://docs.zenguard.xyz" className="styled-link" target="_blank">
               Docs
             </a>
           </li>
  
         </ul>
-        {/* <ul > */}
-          {/* <li>
-            <NavLink to="/teams" className="styled-link">
-              About Us
-            </NavLink>
-          </li> */}
- 
-        {/* </ul> */}
-          {/* </li> */}
+
             <ActionIcon
               className={classes.buttonContainer}
               // variant="filled"

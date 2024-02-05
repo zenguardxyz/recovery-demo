@@ -38,7 +38,7 @@ export const BuiltFor = () => {
             <img src={Code} width="50px" alt='icon' />
             </IconsContainer>
             <h4>DApp developers </h4>
-            <SubTitle centered> The most secure way to  provide DApp features via smart accounts as verified plugins</SubTitle>
+            <SubTitle centered> The most secure way to  provide DApp features via smart accounts as verified modules</SubTitle>
           </FeatureCard>
           <FeatureCard >
           <IconsContainer>

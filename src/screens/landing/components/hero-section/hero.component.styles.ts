@@ -42,7 +42,7 @@ export const HeroSectionContainer = styled.section`
     justify-self: start;
     h1 {
       font-weight: 600;
-      font-size: 45px;
+      font-size: 42px;
       line-height: 60px;
       color: #fff;
       margin-top: 4rem;

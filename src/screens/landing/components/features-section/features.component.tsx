@@ -44,7 +44,7 @@ export const Features = () => {
             </IconContainer>
           <h3 class="heading-tertiary">Extended Smart Account</h3>
           <p class="step-description">
-          ZenGuard provides basic security and onboarding related plugins such as account recovery, gas sponsored transactions etc.
+          ZenGuard provides basic security and onboarding related modules such as account recovery, gas sponsored transactions etc.
           </p>
         </div>
         <div class="step-cards">
@@ -77,7 +77,7 @@ export const Features = () => {
             </IconContainer>
           <h3 class="heading-tertiary">Developer Driven</h3>
           <p class="step-description">
-          Tools and infra for seamless experience for plugins developers.
+          Tools and infra for seamless experience for module developers.
           </p>
         </div>
         <div class="step-cards">
@@ -88,14 +88,14 @@ export const Features = () => {
             {/* <IconContainer> */}
             <img src={Deploy} width="70px" alt='icon' />
             </IconsContainer>
-            <h4> Streamlined plugin publishing</h4>
+            <h4> Streamlined module publishing</h4>
             </>
           </FeatureCard>
           <FeatureCard >
           <IconsContainer>
             <img src={Monetize} width="90px" alt='icon' />
             </IconsContainer>
-            <h4>Incentivise the plugins</h4>
+            <h4>Incentivise the modules</h4>
           </FeatureCard>
           </CardsContainer>
           </div>
@@ -109,7 +109,7 @@ export const Features = () => {
             </IconContainer>
           <h3 class="heading-tertiary"> Auditor Verified </h3>
           <p class="step-description">
-          Verified auditors can audit and attest the plugins with audit scores and proofs.
+          Verified auditors can audit and attest the modules with audit scores and proofs.
           </p>
         </div>
         <div class="step-cards">
